@@ -6,6 +6,7 @@ body
   background-image:url('../images/background.png');
   background-size:cover;
   background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
 .center-div
@@ -23,7 +24,17 @@ form
   padding: 0 3em;
 }
 
+#login {
+  margin-top:0;
+}
+
 #login .title > span
 {
   font-size: .8em;
+}
+
+@media screen and (max-width:1200px) {
+  #login {
+    margin-top:100px !important;
+  }
 }
