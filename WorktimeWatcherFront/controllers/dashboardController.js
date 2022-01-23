@@ -12,4 +12,4 @@ const Dashboard = (req,res) => {
 const LoginPage = (req,res) => {
     res.render('login-failed');
 }
-module.exports = {Dashboard,LoginPage};
+export default {Dashboard,LoginPage};

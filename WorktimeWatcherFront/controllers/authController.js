@@ -1,19 +1,25 @@
+import fetch from 'node-fetch';
+import https from "https";
 
-const credential = {
-    email:"admin@gmail.com",
-    password:"admin123"
-}
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+});
+const URI = "https://localhost:7003/api/Login";
 
 const Login = async (req,res) => {
-    //if (await authWithDatabase(req.body.email,req.body.password))
-    if (req.body.email === credential.email && req.body.password === credential.password)
+    let responseData = await postLoginData(URI, {
+        login: req.body.email,
+        password: req.body.password
+    });
+    if (!responseData.token)
+    {
+        await res.redirect('/login-failed');
+    }
+    else
     {
         req.session.user = req.body.email;
-        //registerUserActivity(req.session.user);
-        res.redirect('/dashboard');
-    } else {
-        res.redirect('/login-failed');
-        //res.end("Invalid Username or password");
+        req.session.token = responseData.token;
+        await res.redirect('/dashboard');
     }
 };
 
@@ -31,4 +37,22 @@ const Logout = (req,res) => {
     });
 };
 
-module.exports = {Login, Logout};
+async function postLoginData(url = '', data = {})
+{
+    const response = await fetch(url, {
+        method:'POST',
+        mode:'cors',
+        cache:'no-cache',
+        credentials:'same-origin',
+        headers: {
+            'Content-Type':'application/json'
+        },
+        redirect:'follow',
+        referrerPolicy:'no-referrer',
+        body: JSON.stringify(data),
+        agent: httpsAgent
+    });
+    return response.json();
+}
+
+export default {Login, Logout};

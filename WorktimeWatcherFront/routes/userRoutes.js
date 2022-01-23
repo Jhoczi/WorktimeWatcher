@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
-const dashboardController = require('../controllers/dashboardController');
+import express from "express";
+import authController from "../controllers/authController.js";
+import dashboardController from "../controllers/dashboardController.js";
 
+const router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Worktime Watcher' });
@@ -13,6 +13,6 @@ router.get('/dashboard',dashboardController.Dashboard);
 router.post('/login',authController.Login);
 // logout user
 router.get('/logout', authController.Logout);
-router.get('/login-failed/',dashboardController.LoginPage);
+router.get('/login-failed',dashboardController.LoginPage);
 
-module.exports = router;
+export default router;
