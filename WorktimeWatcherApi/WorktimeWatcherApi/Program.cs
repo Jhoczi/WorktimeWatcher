@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<WorktimeWatcherDatabaseSettings>(builder.Configuration.GetSection("WorktimeWatcherDB"));
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<ExtensionsService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     option =>

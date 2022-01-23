@@ -22,12 +22,11 @@ public class UserService
         await _users.ReplaceOneAsync(x => x.Id == id, updatedUser);
     public async Task RemoveAsync(string id) => await _users.DeleteOneAsync(x => x.Id == id);
 
-    public async Task<User?> Verify(User? user)
+    public async Task<User?> AuthenticateUser(User user)
     {
-        if (user is null)
-            return null;
-        var userResult = await _users.Find(x => x.Login == user.Login && x.Password == user.Password).FirstOrDefaultAsync();
+        var userList = await GetAsync();
+        var userResult = userList.Find(x => x.Login == user.Login && x.Password == user.Password);
         return userResult ?? null;
     }
-        
+    
 }
