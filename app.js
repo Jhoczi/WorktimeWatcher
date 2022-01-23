@@ -3,8 +3,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session');
+const {v4: uuidv4} = require('uuid');
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/userRoutes');
 const usersRouter = require('./routes/users');
 
 const app = express();
@@ -19,7 +21,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret:uuidv4(),
+  resave:false,
+  saveUninitialized:true
+}));
+
 app.use('/', indexRouter);
+app.use('/dashboard',indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
