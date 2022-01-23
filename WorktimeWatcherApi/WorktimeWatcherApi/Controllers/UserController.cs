@@ -18,6 +18,13 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<List<User>> Get() => await _userService.GetAsync();
 
+    [HttpGet("{user}")]
+    public async Task<User> Verify(User user)
+    {
+        //var user = await _userService.Verify(user);
+        throw new NotImplementedException();
+    }
+    
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<User>> Get(string id)
     {

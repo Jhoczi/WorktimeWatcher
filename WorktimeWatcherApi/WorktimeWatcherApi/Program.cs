@@ -1,3 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using WorktimeWatcherApi.Models;
 using WorktimeWatcherApi.Services;
 
@@ -13,6 +17,23 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<WorktimeWatcherDatabaseSettings>(builder.Configuration.GetSection("WorktimeWatcherDB"));
 builder.Services.AddSingleton<UserService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    option =>
+    {
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,    
+            ValidateAudience = true,    
+            ValidateLifetime = true,    
+            ValidateIssuerSigningKey = true,    
+            //ValidIssuer = Configuration["Jwt:Issuer"],    
+            ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,    
+            ValidAudience = builder.Configuration.GetSection("Jwt:Issuer").Value,    
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
+        };
+    });
+builder.Services.AddMvc();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", corsPolicyBuilder =>
@@ -26,6 +47,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,9 +58,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
-
+//app.UseMvc();
 app.UseAuthorization();
 
 app.MapControllers();

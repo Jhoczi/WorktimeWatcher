@@ -21,4 +21,13 @@ public class UserService
     public async Task UpdateAsync(string id, User updatedUser) =>
         await _users.ReplaceOneAsync(x => x.Id == id, updatedUser);
     public async Task RemoveAsync(string id) => await _users.DeleteOneAsync(x => x.Id == id);
+
+    public async Task<User?> Verify(User? user)
+    {
+        if (user is null)
+            return null;
+        var userResult = await _users.Find(x => x.Login == user.Login && x.Password == user.Password).FirstOrDefaultAsync();
+        return userResult ?? null;
+    }
+        
 }
