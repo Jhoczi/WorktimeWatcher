@@ -24,7 +24,7 @@
 *.suo
 *.user
 .vs/
-WorktimeWatcherFront/bin/
+
 [Oo]bj/
 _UpgradeReport_Files/
 [Pp]ackages/
