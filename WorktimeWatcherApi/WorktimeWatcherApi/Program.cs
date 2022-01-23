@@ -1,3 +1,6 @@
+using WorktimeWatcherApi.Models;
+using WorktimeWatcherApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<WorktimeWatcherDatabaseSettings>(builder.Configuration.GetSection("WorktimeWatcherDB"));
+builder.Services.AddSingleton<UserService>();
 
 var app = builder.Build();
 
